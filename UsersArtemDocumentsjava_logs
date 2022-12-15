@@ -1,0 +1,5 @@
+2022-12-13 20:15:23,907 INFO io.proj3ct.SpringDemoBot.SpringDemoBotApplication [main] Starting SpringDemoBotApplication using Java 11.0.17 on ArtemPC with PID 17336 (C:\Users\Artem\IdeaProjects\SpringDemoBot\target\classes started by Artem in C:\Users\Artem\IdeaProjects\SpringDemoBot)
+2022-12-13 20:15:23,908 DEBUG io.proj3ct.SpringDemoBot.SpringDemoBotApplication [main] Running with Spring Boot v2.7.6, Spring v5.3.24
+2022-12-13 20:15:23,909 INFO io.proj3ct.SpringDemoBot.SpringDemoBotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2022-12-13 20:15:24,650 INFO io.proj3ct.SpringDemoBot.SpringDemoBotApplication [main] Started SpringDemoBotApplication in 0.941 seconds (JVM running for 1.431)
+2022-12-13 20:15:24,881 INFO io.proj3ct.SpringDemoBot.service.TelegramBot [r9act_bot Telegram Executor] Replied to user: Artem
