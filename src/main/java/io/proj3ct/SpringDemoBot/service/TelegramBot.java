@@ -7,17 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Slf4j //библиотека логгирования
 @Component //позволит автоматически создавать экземпляр Spring
@@ -25,28 +23,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
     private UserRepository userRepository;
-    final BotConfig config;
 
     private static final String HELP_TEXT = "For help call 911\n\n" +
             "For other help call 119";
+    final BotConfig config;
 
     public TelegramBot(BotConfig config) { //конструктор
         this.config = config;
-        List<BotCommand> listofCommands = new ArrayList<>();
-        listofCommands.add(new BotCommand("/start", "get a welcome message"));
-        listofCommands.add(new BotCommand("/mydata", "get user data"));
-        listofCommands.add(new BotCommand("/deletedata", "delete user data"));
-        listofCommands.add(new BotCommand("/help", "how to use this bot"));
-        listofCommands.add(new BotCommand("/settings", "set you preferences"));
-        try {
-            this.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e) {
-            log.error("Error setting bot's command list: " + e.getMessage());
-        }
-
-
     }
-
 
 
     @Override
@@ -77,6 +61,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                 case "/help":
 
                     helpCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+
+                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+
                     break;
 
                 default:
@@ -84,6 +71,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, "Not available yet!");
             }
         }
+    }
+
+    private void helpCommandReceived(long chatId, String name) {
+
+
+        log.info("Helped user: " + name);                   //лог в уровень ИНФО
+
+        sendMessage(chatId, HELP_TEXT);
     }
 
     private void registerUser(Message msg) {
@@ -113,14 +108,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         log.info("Replied to user: " + name);                   //лог в уровень ИНФО
 
         sendMessage(chatId, answer);
-    }
-
-    private void helpCommandReceived(long chatId, String name) {
-
-
-        log.info("Helped user: " + name);                   //лог в уровень ИНФО
-
-        sendMessage(chatId, HELP_TEXT);
     }
 
     private void sendMessage(long chatId, String textToSend) {
